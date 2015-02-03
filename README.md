@@ -20,7 +20,7 @@ grunt.initConfig({
     screeps: {
         options: {
             email: 'YOUR_EMAIL',
-            password: 'YOUR_PASSWORD
+            password: 'YOUR_PASSWORD'
         },
         dist: {
             src: ['dist/*.js']
