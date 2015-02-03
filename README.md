@@ -15,21 +15,22 @@ npm install grunt-screeps
 
 **Gruntfile.js:**
 ```js
-var grunt = require('grunt');
+module.exports = function(grunt) {
 
-grunt.loadNpmTasks('grunt-screeps');
+    grunt.loadNpmTasks('grunt-screeps');
 
-grunt.initConfig({
-    screeps: {
-        options: {
-            email: 'YOUR_EMAIL',
-            password: 'YOUR_PASSWORD'
-        },
-        dist: {
-            src: ['dist/*.js']
+    grunt.initConfig({
+        screeps: {
+            options: {
+                email: 'YOUR_EMAIL',
+                password: 'YOUR_PASSWORD'
+            },
+            dist: {
+                src: ['dist/*.js']
+            }
         }
-    }
-});
+    });
+}
 ```
 
 Now you can run this command to commit your code from `dist` folder to your Screeps account:
