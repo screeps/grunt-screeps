@@ -13,6 +13,7 @@ npm install grunt-screeps
 
 ### Usage Example
 
+**Gruntfile.js:**
 ```js
 grunt.loadNpmTasks('grunt-screeps');
 
@@ -29,3 +30,7 @@ grunt.initConfig({
 });
 ```
 
+Now you can run this command to commit your code from `dist` folder to your Screeps account:
+```
+grunt screeps
+```
