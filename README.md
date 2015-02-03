@@ -15,6 +15,8 @@ npm install grunt-screeps
 
 **Gruntfile.js:**
 ```js
+var grunt = require('grunt');
+
 grunt.loadNpmTasks('grunt-screeps');
 
 grunt.initConfig({
