@@ -3,7 +3,7 @@
 var grunt = require('grunt'),
     nock = require('nock'),
     api = nock('https://screeps.com')
-        .post('/api/user/code', {"modules":{"hello":"console.log(\"Hello world!\");","main":"require(\"hello\");"}})
+        .post('/api/user/code', {"branch": "default", "modules":{"hello":"console.log(\"Hello world!\");","main":"require(\"hello\");"}})
         .reply(200, '{"ok":1}');
 
 

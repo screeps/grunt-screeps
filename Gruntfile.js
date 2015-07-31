@@ -29,7 +29,8 @@ module.exports = function (grunt) {
         screeps: {
             options: {
                 email: 'EMAIL',
-                password: 'PASSWORD'
+                password: 'PASSWORD',
+                branch: 'default'
             },
             test: {
                 src: ['test/fixtures/*']

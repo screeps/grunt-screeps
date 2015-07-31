@@ -59,7 +59,12 @@ module.exports = function (grunt) {
                 res.on('end', function() {
                     data = JSON.parse(data);
                     if(data.ok) {
-                        grunt.log.writeln('Commited to Screeps account "' + options.email + '" successfully.');
+                        var msg = 'Commited to Screeps account "' + options.email + '"';
+                        if(options.branch) {
+                            msg += ' branch "' + options.branch+'"';
+                        }
+                        msg += '.';
+                        grunt.log.writeln(msg);
                     }
                     else {
                         grunt.log.error('Error while commiting to Screeps: '+util.inspect(data));
@@ -68,7 +73,11 @@ module.exports = function (grunt) {
                 });
             });
 
-            req.write(JSON.stringify({modules: modules}));
+            var postData = {modules: modules};
+            if(options.branch) {
+                postData.branch = options.branch;
+            }
+            req.write(JSON.stringify(postData));
             req.end();
         });
     });

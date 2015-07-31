@@ -23,7 +23,8 @@ module.exports = function(grunt) {
         screeps: {
             options: {
                 email: 'YOUR_EMAIL',
-                password: 'YOUR_PASSWORD'
+                password: 'YOUR_PASSWORD',
+                branch: 'default'
             },
             dist: {
                 src: ['dist/*.js']
