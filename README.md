@@ -1,6 +1,6 @@
 # grunt-screeps
 
-> A Grunt plugin for commiting code to your Screeps account
+> A Grunt plugin for committing code to your [Screeps](https://screeps.com) account.
 
 ## Getting Started
 This plugin requires Grunt `~0.4.5`
@@ -24,7 +24,8 @@ module.exports = function(grunt) {
             options: {
                 email: 'YOUR_EMAIL',
                 password: 'YOUR_PASSWORD',
-                branch: 'default'
+                branch: 'default',
+                ptr: false
             },
             dist: {
                 src: ['dist/*.js']

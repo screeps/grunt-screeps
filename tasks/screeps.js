@@ -37,11 +37,10 @@ module.exports = function (grunt) {
                 modules[name] = grunt.file.read(filepath);
             });
 
-
             var req = https.request({
                 hostname: 'screeps.com',
                 port: 443,
-                path: '/api/user/code',
+                path: options.ptr ? '/ptr/api/user/code' : '/api/user/code',
                 method: 'POST',
                 auth: options.email + ':' + options.password,
                 headers: {
@@ -59,9 +58,12 @@ module.exports = function (grunt) {
                 res.on('end', function() {
                     data = JSON.parse(data);
                     if(data.ok) {
-                        var msg = 'Commited to Screeps account "' + options.email + '"';
+                        var msg = 'Committed to Screeps account "' + options.email + '"';
                         if(options.branch) {
                             msg += ' branch "' + options.branch+'"';
+                        }
+                        if(options.ptr) {
+                            msg += ' [PTR]';
                         }
                         msg += '.';
                         grunt.log.writeln(msg);
