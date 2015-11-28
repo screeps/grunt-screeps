@@ -61,7 +61,7 @@ module.exports = function (grunt) {
 
                 res.on('end', function() {
                     try {
-                      parsed = JSON.parse(data);
+                      var parsed = JSON.parse(data);
                       if(parsed.ok) {
                           var msg = 'Committed to Screeps account "' + options.email + '"';
                           if(options.branch) {
@@ -77,7 +77,7 @@ module.exports = function (grunt) {
                           grunt.log.error('Error while commiting to Screeps: '+util.inspect(parsed));
                       }
                     } catch (e) {
-                      grunt.log.error('Error while processing json: '+util.inspect(data));
+                      grunt.log.error('Error while processing json: '+e.message);
                     }
                     done();
                 });
