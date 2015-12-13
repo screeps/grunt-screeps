@@ -9,6 +9,7 @@
 'use strict';
 
 require('./test/screeps_test');
+require('./test/screeps_empty_test');
 
 module.exports = function (grunt) {
 
@@ -33,13 +34,15 @@ module.exports = function (grunt) {
                 branch: 'default'
             },
             test: {
-                src: ['test/fixtures/*']
+                src: ['test/fixtures/happy/*']
             }
         },
 
         // Unit tests.
         nodeunit: {
-            tests: ['test/*_test.js']
+            tests: [],
+            testHappy: ['test/screeps_test.js'],
+            testEmpty: ['test/screeps_empty_test.js']
         }
 
     });
@@ -53,9 +56,19 @@ module.exports = function (grunt) {
 
     // Whenever the "test" task is run, first clean the "tmp" dir, then run this
     // plugin's task(s), then test the result.
-    grunt.registerTask('test', ['screeps', 'nodeunit']);
+    grunt.registerTask('test-happy', ['screeps', 'nodeunit:testHappy']);
+    grunt.registerTask('test-empty', ['screeps', 'nodeunit:testEmpty']);
+
+    grunt.registerTask('switch-to-empty-tests', function () {
+        grunt.config.set('screeps.test.src', ['test/fixtures/empty/*']);
+    });
 
     // By default, lint and run all tests.
-    grunt.registerTask('default', ['jshint', 'test']);
+    grunt.registerTask('default', [
+        'jshint',
+        'test-happy',
+        'switch-to-empty-tests',
+        'test-empty'
+    ]);
 
 };

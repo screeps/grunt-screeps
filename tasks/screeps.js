@@ -23,9 +23,13 @@ module.exports = function (grunt) {
         var done = this.async();
 
         this.files.forEach(function (f) {
+            if (!f.src.length) {
+                grunt.log.error('No files found. Stopping.');
+                done();
+                return;
+            }
 
             f.src.filter(function (filepath) {
-
                 if (!grunt.file.exists(filepath)) {
                     grunt.log.warn('Source file "' + filepath + '" not found.');
                     return false;
