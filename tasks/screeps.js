@@ -55,25 +55,33 @@ module.exports = function (grunt) {
 
                 var data = '';
 
+                if(res.statusCode < 200 || res.statusCode >= 300) {
+                  grunt.fail.fatal('Screeps server returned error code ' + res.statusCode)
+                }
+
                 res.on('data', function(chunk) {
                     data += chunk;
                 });
 
                 res.on('end', function() {
-                    data = JSON.parse(data);
-                    if(data.ok) {
-                        var msg = 'Committed to Screeps account "' + options.email + '"';
-                        if(options.branch) {
-                            msg += ' branch "' + options.branch+'"';
-                        }
-                        if(options.ptr) {
-                            msg += ' [PTR]';
-                        }
-                        msg += '.';
-                        grunt.log.writeln(msg);
-                    }
-                    else {
-                        grunt.log.error('Error while commiting to Screeps: '+util.inspect(data));
+                    try {
+                      var parsed = JSON.parse(data);
+                      if(parsed.ok) {
+                          var msg = 'Committed to Screeps account "' + options.email + '"';
+                          if(options.branch) {
+                              msg += ' branch "' + options.branch+'"';
+                          }
+                          if(options.ptr) {
+                              msg += ' [PTR]';
+                          }
+                          msg += '.';
+                          grunt.log.writeln(msg);
+                      }
+                      else {
+                          grunt.log.error('Error while commiting to Screeps: '+util.inspect(parsed));
+                      }
+                    } catch (e) {
+                      grunt.log.error('Error while processing json: '+e.message);
                     }
                     done();
                 });
