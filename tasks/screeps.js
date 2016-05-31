@@ -10,7 +10,8 @@
 
 var path = require('path'),
     https = require('https'),
-    util = require('util');
+    util = require('util'),
+    HttpsProxyAgent = require('https-proxy-agent');
 
 module.exports = function (grunt) {
 
@@ -41,7 +42,7 @@ module.exports = function (grunt) {
                 modules[name] = grunt.file.read(filepath);
             });
 
-            var req = https.request({
+            var req_opts = {
                 hostname: 'screeps.com',
                 port: 443,
                 path: options.ptr ? '/ptr/api/user/code' : '/api/user/code',
@@ -50,13 +51,20 @@ module.exports = function (grunt) {
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8'
                 }
-            }, function(res) {
+            };
+
+            if (options.http_proxy) {
+                var proxyAgent = new HttpsProxyAgent(options.http_proxy);
+                req_opts.agent = proxyAgent;
+            }
+
+            var req = https.request(req_opts, function(res) {
                 res.setEncoding('utf8');
 
                 var data = '';
 
                 if(res.statusCode < 200 || res.statusCode >= 300) {
-                  grunt.fail.fatal('Screeps server returned error code ' + res.statusCode)
+                  grunt.fail.fatal('Screeps server returned error code ' + res.statusCode);
                 }
 
                 res.on('data', function(chunk) {
