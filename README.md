@@ -23,7 +23,8 @@ module.exports = function(grunt) {
                 email: 'YOUR_EMAIL',
                 password: 'YOUR_PASSWORD',
                 branch: 'default',
-                ptr: false
+                ptr: false,
+                http_proxy: 'http://YOUR_PROXY_HOST:YOUR_PROXY_PORT',
             },
             dist: {
                 src: ['dist/*.js']
