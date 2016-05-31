@@ -56,7 +56,7 @@ module.exports = function (grunt) {
                 var data = '';
 
                 if(res.statusCode < 200 || res.statusCode >= 300) {
-                  grunt.fail.fatal('Screeps server returned error code ' + res.statusCode)
+                  grunt.fail.fatal('Screeps server returned error code ' + res.statusCode);
                 }
 
                 res.on('data', function(chunk) {
