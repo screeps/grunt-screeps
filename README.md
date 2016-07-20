@@ -45,7 +45,7 @@ Add a new file to your project: `config/screeps-creds.json`
 }
 ```
 
-Ensure that file is added to your `.gitignore` file to avoid committing your credentials to GitHub.
+Ensure that this file is added to your `.gitignore` file to avoid committing your credentials to GitHub.
 
 #### Deploy to Screeps
 
