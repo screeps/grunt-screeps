@@ -38,6 +38,18 @@ module.exports = function (grunt) {
                 }
             }).map(function (filepath) {
                 var name = path.basename(filepath).replace(/\.js$/,'');
+
+                var path_array = filepath.split('/');
+                if(path_array.length > 2){
+                  var new_path = '';
+                  for(var n = 1; n < path_array.length; n++){
+                    if(path_array[n] != 'main'){
+                      new_path += (new_path.length ? '.' : '') + path_array[n];
+                    }
+                  }
+                  name = new_path.replace(/\.js$/,'');
+                }
+                
                 modules[name] = grunt.file.read(filepath);
             });
 
