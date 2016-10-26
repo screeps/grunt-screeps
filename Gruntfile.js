@@ -29,6 +29,7 @@ module.exports = function (grunt) {
         // Configuration to be run (and then tested).
         screeps: {
             options: {
+                server: 'screeps.com',
                 email: 'EMAIL',
                 password: 'PASSWORD',
                 branch: 'default'
