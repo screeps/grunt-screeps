@@ -42,7 +42,7 @@ module.exports = function (grunt) {
             });
 
             var req = https.request({
-                hostname: 'screeps.com',
+                hostname: options.server,
                 port: 443,
                 path: options.ptr ? '/ptr/api/user/code' : '/api/user/code',
                 method: 'POST',
