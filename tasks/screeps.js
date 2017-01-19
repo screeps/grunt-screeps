@@ -9,6 +9,7 @@
 'use strict';
 
 var path = require('path'),
+    http = require('http'),
     https = require('https'),
     util = require('util');
 
@@ -17,6 +18,8 @@ module.exports = function (grunt) {
     grunt.registerMultiTask('screeps', 'A Grunt plugin for commiting code to your Screeps account', function () {
 
         var options = this.options({});
+
+        var server = options.server || {};
 
         var modules = {};
 
@@ -41,9 +44,10 @@ module.exports = function (grunt) {
                 modules[name] = grunt.file.read(filepath);
             });
 
-            var req = https.request({
-                hostname: 'screeps.com',
-                port: 443,
+            var proto = server.http ? http : https,
+                req = proto.request({
+                hostname: server.host || 'screeps.com',
+                port: server.port || (server.http ? 80 : 443),
                 path: options.ptr ? '/ptr/api/user/code' : '/api/user/code',
                 method: 'POST',
                 auth: options.email + ':' + options.password,

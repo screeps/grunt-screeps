@@ -37,3 +37,36 @@ Now you can run this command to commit your code from `dist` folder to your Scre
 ```
 grunt screeps
 ```
+
+### Private Server Usage Example
+
+**Gruntfile.js:**
+```js
+module.exports = function(grunt) {
+
+    grunt.loadNpmTasks('grunt-screeps');
+
+    grunt.initConfig({
+        screeps: {
+            options: {
+                server: {
+                    host: 'your.server.hostname.or.ip',
+                    port: 21025,
+                    http: true
+                },
+                email: 'YOUR_EMAIL',
+                password: 'YOUR_PASSWORD',
+                branch: 'default',
+                ptr: false
+            },
+            dist: {
+                src: ['dist/*.js']
+            }
+        }
+    });
+}
+```
+
+The above example is confirmed to work with a server running on the default
+port 21025 with the
+[screepsmod-auth](https://github.com/ScreepsMods/screepsmod-auth) mod enabled.
