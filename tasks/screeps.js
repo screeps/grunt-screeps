@@ -70,8 +70,9 @@ module.exports = function (grunt) {
                 res.on('end', function() {
                     try {
                       var parsed = JSON.parse(data);
+                      var serverText = server && server.host || 'Screeps';
                       if(parsed.ok) {
-                          var msg = 'Committed to Screeps account "' + options.email + '"';
+                          var msg = 'Committed to ' + serverText + ' account "' + options.email + '"';
                           if(options.branch) {
                               msg += ' branch "' + options.branch+'"';
                           }
@@ -82,10 +83,10 @@ module.exports = function (grunt) {
                           grunt.log.writeln(msg);
                       }
                       else {
-                          grunt.log.error('Error while commiting to Screeps: '+util.inspect(parsed));
+                          grunt.log.error('Error while committing to ' + serverText + ': '+util.inspect(parsed));
                       }
                     } catch (e) {
-                      grunt.log.error('Error while processing json: '+e.message);
+                      grunt.log.error('Error while processing ' + serverText + ' json: '+e.message);
                     }
                     done();
                 });
