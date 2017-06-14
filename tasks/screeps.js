@@ -9,6 +9,7 @@
 'use strict';
 
 var path = require('path'),
+    http = require('http'),
     https = require('https'),
     util = require('util');
 
@@ -17,6 +18,8 @@ module.exports = function (grunt) {
     grunt.registerMultiTask('screeps', 'A Grunt plugin for commiting code to your Screeps account', function () {
 
         var options = this.options({});
+
+        var server = options.server || {};
 
         var modules = {};
 
@@ -41,9 +44,10 @@ module.exports = function (grunt) {
                 modules[name] = grunt.file.read(filepath);
             });
 
-            var req = https.request({
-                hostname: 'screeps.com',
-                port: 443,
+            var proto = server.http ? http : https,
+                req = proto.request({
+                hostname: server.host || 'screeps.com',
+                port: server.port || (server.http ? 80 : 443),
                 path: options.ptr ? '/ptr/api/user/code' : '/api/user/code',
                 method: 'POST',
                 auth: options.email + ':' + options.password,
@@ -66,8 +70,9 @@ module.exports = function (grunt) {
                 res.on('end', function() {
                     try {
                       var parsed = JSON.parse(data);
+                      var serverText = server && server.host || 'Screeps';
                       if(parsed.ok) {
-                          var msg = 'Committed to Screeps account "' + options.email + '"';
+                          var msg = 'Committed to ' + serverText + ' account "' + options.email + '"';
                           if(options.branch) {
                               msg += ' branch "' + options.branch+'"';
                           }
@@ -78,10 +83,10 @@ module.exports = function (grunt) {
                           grunt.log.writeln(msg);
                       }
                       else {
-                          grunt.log.error('Error while commiting to Screeps: '+util.inspect(parsed));
+                          grunt.log.error('Error while committing to ' + serverText + ': '+util.inspect(parsed));
                       }
                     } catch (e) {
-                      grunt.log.error('Error while processing json: '+e.message);
+                      grunt.log.error('Error while processing ' + serverText + ' json: '+e.message);
                     }
                     done();
                 });

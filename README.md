@@ -37,3 +37,5 @@ Now you can run this command to commit your code from `dist` folder to your Scre
 ```
 grunt screeps
 ```
+
+See more advanced usage examples in [this docs article](http://docs.screeps.com/contributed/advanced_grunt.html).
