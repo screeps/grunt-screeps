@@ -71,6 +71,7 @@ module.exports = function (grunt) {
                     var serverText = server && server.host || 'Screeps';
                     try {
                       var parsed = JSON.parse(data);
+                      var serverText = server && server.host || 'Screeps';
                       if(parsed.ok) {
                           var msg = 'Committed to ' + serverText + ' account "' + options.email + '"';
                           if(options.branch) {
