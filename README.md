@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/grunt-screeps.svg)](https://badge.fury.io/js/grunt-screeps)
+
 # grunt-screeps
 
 > A Grunt plugin for committing code to your [Screeps](https://screeps.com) account.
