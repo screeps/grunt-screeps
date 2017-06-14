@@ -60,7 +60,7 @@ module.exports = function (grunt) {
                 var data = '';
 
                 if(res.statusCode < 200 || res.statusCode >= 300) {
-                  grunt.fail.fatal('Screeps server returned error code ' + res.statusCode)
+                  grunt.fail.fatal('Screeps server returned error code ' + res.statusCode);
                 }
 
                 res.on('data', function(chunk) {
@@ -68,9 +68,9 @@ module.exports = function (grunt) {
                 });
 
                 res.on('end', function() {
+                    var serverText = server && server.host || 'Screeps';
                     try {
                       var parsed = JSON.parse(data);
-                      var serverText = server && server.host || 'Screeps';
                       if(parsed.ok) {
                           var msg = 'Committed to ' + serverText + ' account "' + options.email + '"';
                           if(options.branch) {
