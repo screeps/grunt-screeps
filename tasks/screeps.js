@@ -40,8 +40,16 @@ module.exports = function (grunt) {
                     return true;
                 }
             }).map(function (filepath) {
-                var name = path.basename(filepath).replace(/\.js$/,'');
-                modules[name] = grunt.file.read(filepath);
+                var basename = path.basename(filepath),
+                    ext = path.extname(basename),
+                    name = basename.replace(ext,'');
+
+                if(ext === '.js') {
+                    modules[name] = grunt.file.read(filepath, {encoding: 'utf8'});
+                }
+                else {
+                    modules[name] = {binary: grunt.file.read(filepath, {encoding: null}).toString('base64')};
+                }
             });
 
             var proto = server.http ? http : https,
@@ -71,7 +79,7 @@ module.exports = function (grunt) {
                     var serverText = server && server.host || 'Screeps';
                     try {
                       var parsed = JSON.parse(data);
-                      var serverText = server && server.host || 'Screeps';
+                      serverText = server && server.host || 'Screeps';
                       if(parsed.ok) {
                           var msg = 'Committed to ' + serverText + ' account "' + options.email + '"';
                           if(options.branch) {
