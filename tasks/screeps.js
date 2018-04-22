@@ -52,17 +52,24 @@ module.exports = function (grunt) {
                 }
             });
 
-            var proto = server.http ? http : https,
-                req = proto.request({
+            const requestOptions = {
                 hostname: server.host || 'screeps.com',
                 port: server.port || (server.http ? 80 : 443),
                 path: options.ptr ? '/ptr/api/user/code' : '/api/user/code',
                 method: 'POST',
-                auth: options.email + ':' + options.password,
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8'
                 }
-            }, function(res) {
+            };
+
+            if (options.token) {
+                requestOptions.headers['X-Token'] = options.token;
+            } else {
+                requestOptions.auth = options.email + ':' + options.password;
+            }
+
+            var proto = server.http ? http : https,
+                req = proto.request(requestOptions, function(res) {
                 res.setEncoding('utf8');
 
                 var data = '';
@@ -81,7 +88,7 @@ module.exports = function (grunt) {
                       var parsed = JSON.parse(data);
                       serverText = server && server.host || 'Screeps';
                       if(parsed.ok) {
-                          var msg = 'Committed to ' + serverText + ' account "' + options.email + '"';
+                          var msg = 'Committed to ' + serverText + ' account "' + options.accountAlias + '"';
                           if(options.branch) {
                               msg += ' branch "' + options.branch+'"';
                           }
