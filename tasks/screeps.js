@@ -51,63 +51,62 @@ module.exports = function (grunt) {
                     modules[name] = {binary: grunt.file.read(filepath, {encoding: null}).toString('base64')};
                 }
             });
+        });
 
-            var proto = server.http ? http : https,
-                req = proto.request({
-                hostname: server.host || 'screeps.com',
-                port: server.port || (server.http ? 80 : 443),
-                path: options.ptr ? '/ptr/api/user/code' : '/api/user/code',
-                method: 'POST',
-                auth: options.email + ':' + options.password,
-                headers: {
-                    'Content-Type': 'application/json; charset=utf-8'
-                }
-            }, function(res) {
-                res.setEncoding('utf8');
+        var proto = server.http ? http : https;
+        var req = proto.request({
+            hostname: server.host || 'screeps.com',
+            port: server.port || (server.http ? 80 : 443),
+            path: options.ptr ? '/ptr/api/user/code' : '/api/user/code',
+            method: 'POST',
+            auth: options.email + ':' + options.password,
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+            }
+        }, function(res) {
+            res.setEncoding('utf8');
 
-                var data = '';
+            var data = '';
 
-                if(res.statusCode < 200 || res.statusCode >= 300) {
-                  grunt.fail.fatal('Screeps server returned error code ' + res.statusCode);
-                }
+            if(res.statusCode < 200 || res.statusCode >= 300) {
+              grunt.fail.fatal('Screeps server returned error code ' + res.statusCode);
+            }
 
-                res.on('data', function(chunk) {
-                    data += chunk;
-                });
-
-                res.on('end', function() {
-                    var serverText = server && server.host || 'Screeps';
-                    try {
-                      var parsed = JSON.parse(data);
-                      serverText = server && server.host || 'Screeps';
-                      if(parsed.ok) {
-                          var msg = 'Committed to ' + serverText + ' account "' + options.email + '"';
-                          if(options.branch) {
-                              msg += ' branch "' + options.branch+'"';
-                          }
-                          if(options.ptr) {
-                              msg += ' [PTR]';
-                          }
-                          msg += '.';
-                          grunt.log.writeln(msg);
-                      }
-                      else {
-                          grunt.log.error('Error while committing to ' + serverText + ': '+util.inspect(parsed));
-                      }
-                    } catch (e) {
-                      grunt.log.error('Error while processing ' + serverText + ' json: '+e.message);
-                    }
-                    done();
-                });
+            res.on('data', function(chunk) {
+                data += chunk;
             });
 
-            var postData = {modules: modules};
-            if(options.branch) {
-                postData.branch = options.branch;
-            }
-            req.write(JSON.stringify(postData));
-            req.end();
+            res.on('end', function() {
+                var serverText = server && server.host || 'Screeps';
+                try {
+                  var parsed = JSON.parse(data);
+                  serverText = server && server.host || 'Screeps';
+                  if(parsed.ok) {
+                      var msg = 'Committed to ' + serverText + ' account "' + options.email + '"';
+                      if(options.branch) {
+                          msg += ' branch "' + options.branch+'"';
+                      }
+                      if(options.ptr) {
+                          msg += ' [PTR]';
+                      }
+                      msg += '.';
+                      grunt.log.writeln(msg);
+                  }
+                  else {
+                      grunt.log.error('Error while committing to ' + serverText + ': '+util.inspect(parsed));
+                  }
+                } catch (e) {
+                  grunt.log.error('Error while processing ' + serverText + ' json: '+e.message);
+                }
+                done();
+            });
         });
-    });
 
+        var postData = {modules: modules};
+        if(options.branch) {
+            postData.branch = options.branch;
+        }
+        req.write(JSON.stringify(postData));
+        req.end();
+    });
 };
