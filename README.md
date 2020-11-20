@@ -41,7 +41,33 @@ module.exports = function(grunt) {
     });
 }
 ```
+**Season Server Exmaple**
+```js
+module.exports = function(grunt) {
 
+    grunt.loadNpmTasks('grunt-screeps');
+
+    grunt.initConfig({
+        screeps: {
+            options: {
+                token: 'YOUR_FULLACCESS_TOKEN',
+                branch: 'default',
+                season: true
+            },
+            dist: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'dist/',
+                        src: ['**/*.{js,wasm}'],
+                        flatten: true
+                    }
+                ]
+            }
+        }
+    });
+}
+```
 Now you can run this command to commit your code from `dist` folder to your Screeps account:
 ```
 grunt screeps
