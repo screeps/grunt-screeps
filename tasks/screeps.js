@@ -52,16 +52,32 @@ module.exports = function (grunt) {
                 }
             });
 
+            let customPath;
+            if(options.ptr) {
+                customPath = '/ptr/api/user/code';
+            }
+            if(options.season) {
+                customPath = '/season/api/user/code';
+            }
+            let customHeaders = {
+                'Content-Type': 'application/json; charset=utf-8'
+            };
+            let customAuth;
+            if(options.token) {
+                customHeaders['X-Token'] = options.token;
+            }
+            else {
+                customAuth = options.email + ':' + options.password;
+            }
+
             var proto = server.http ? http : https,
                 req = proto.request({
                 hostname: server.host || 'screeps.com',
                 port: server.port || (server.http ? 80 : 443),
-                path: options.ptr ? '/ptr/api/user/code' : '/api/user/code',
+                path: customPath || '/api/user/code',
                 method: 'POST',
-                auth: options.email + ':' + options.password,
-                headers: {
-                    'Content-Type': 'application/json; charset=utf-8'
-                }
+                auth: customAuth,
+                headers: customHeaders
             }, function(res) {
                 res.setEncoding('utf8');
 
@@ -87,6 +103,9 @@ module.exports = function (grunt) {
                           }
                           if(options.ptr) {
                               msg += ' [PTR]';
+                          }
+                          if(options.season) {
+                              msg += ' [SEASON]';
                           }
                           msg += '.';
                           grunt.log.writeln(msg);
