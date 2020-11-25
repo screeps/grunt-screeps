@@ -13,13 +13,22 @@ var path = require('path'),
     https = require('https'),
     util = require('util');
 
+var servers = {
+    persistent: { name: 'Screeps', host: 'screeps.com', path: '/api/user/code' },
+    ptr: { name: 'PTR', host: 'screeps.com', path: '/ptr/api/user/code' },
+    season: { name: 'Season', host: 'screeps.com', path: '/season/api/user/code' }
+};
+
 module.exports = function (grunt) {
 
     grunt.registerMultiTask('screeps', 'A Grunt plugin for commiting code to your Screeps account', function () {
 
         var options = this.options({});
 
-        var server = options.server || {};
+        var server = options.server || (options.ptr ? 'ptr' : 'persistent');
+        if(servers[server]) {
+            server = servers[server];
+        }
 
         var modules = {};
 
@@ -52,17 +61,22 @@ module.exports = function (grunt) {
                 }
             });
 
-            var proto = server.http ? http : https,
-                req = proto.request({
+            var requestOptions = {
                 hostname: server.host || 'screeps.com',
                 port: server.port || (server.http ? 80 : 443),
-                path: options.ptr ? '/ptr/api/user/code' : '/api/user/code',
+                path: server.path || '/api/user/code',
                 method: 'POST',
-                auth: options.email + ':' + options.password,
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8'
                 }
-            }, function(res) {
+            };
+            if(options.token) {
+                requestOptions.headers['X-Token'] = options.token;
+            } else {
+                requestOptions.auth = options.email + ':' + options.password;
+            }
+            var proto = server.http ? http : https,
+                req = proto.request(requestOptions, function(res) {
                 res.setEncoding('utf8');
 
                 var data = '';
@@ -76,17 +90,13 @@ module.exports = function (grunt) {
                 });
 
                 res.on('end', function() {
-                    var serverText = server && server.host || 'Screeps';
+                    var serverText = server && (server.name || server.host) || 'Screeps';
                     try {
                       var parsed = JSON.parse(data);
-                      serverText = server && server.host || 'Screeps';
                       if(parsed.ok) {
                           var msg = 'Committed to ' + serverText + ' account "' + options.email + '"';
                           if(options.branch) {
                               msg += ' branch "' + options.branch+'"';
-                          }
-                          if(options.ptr) {
-                              msg += ' [PTR]';
                           }
                           msg += '.';
                           grunt.log.writeln(msg);

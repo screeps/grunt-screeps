@@ -23,9 +23,9 @@ module.exports = function(grunt) {
         screeps: {
             options: {
                 email: 'YOUR_EMAIL',
-                password: 'YOUR_PASSWORD',
+                token: 'AUTH_TOKEN',
                 branch: 'default',
-                ptr: false
+                // server: 'season'
             },
             dist: {
                 files: [
