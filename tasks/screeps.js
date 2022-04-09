@@ -17,7 +17,8 @@ var servers = {
     persistent: { name: 'Screeps', host: 'screeps.com', path: '/api/user/code' },
     ptr: { name: 'PTR', host: 'screeps.com', path: '/ptr/api/user/code' },
     season: { name: 'Season', host: 'screeps.com', path: '/season/api/user/code' },
-    plus : { name: 'Plus', host: 'server1.screepspl.us', path: '/api/user/code', port : '21025', http : true }
+    plus : { name: 'Plus', host: 'server1.screepspl.us', path: '/api/user/code', port : '21025', http : true },
+    swc : { name: 'SWC', host: 'swc.screepspl.us', path: '/api/user/code', port : '21025', http : true }
 };
 
 module.exports = function (grunt) {
